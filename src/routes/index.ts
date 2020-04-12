@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import {Router} from 'express';
 
-import { apiRouter } from './v1';
+import {apiRouter} from './v1';
 
 export function routes(): Router {
   const router: Router = Router();

@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 
-const getUser = (req: Request, res: Response) => {
-  res.status(200).send('My name Tav.');
+import {getUsers} from '../services/user.service';
+
+export default {
+  getUsers: async (req: Request, res: Response) => {
+    const users = await getUsers();
+    res.status(200).send(users);
+  },
 };
-
-const userController = {
-  getUser,
-};
-
-export default userController;
