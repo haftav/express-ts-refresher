@@ -1,11 +1,13 @@
 import dotenv from 'dotenv';
+dotenv.config();
+
+import bodyParser from 'body-parser';
 import express from 'express';
 import Knex from 'knex';
+import morgan from 'morgan';
 import {Model} from 'objection';
 
-import {routes} from './routes';
-
-dotenv.config();
+import {routes} from './routes/v1';
 
 const isProd = process.env.NODE_ENV === 'production';
 
@@ -20,8 +22,16 @@ Model.knex(knex);
 
 const app = express();
 
+// properties
 app.set('port', process.env.PORT || 3030);
 
-app.use(routes());
+// middleware
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'));
+}
+app.use(bodyParser.json());
+
+// routes
+app.use('/api', routes());
 
 export default app;
