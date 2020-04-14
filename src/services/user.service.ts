@@ -3,29 +3,50 @@ import bcrypt from 'bcrypt';
 import User from '../models/User';
 
 export const getUsers = async (): Promise<User[]> => {
-  const users = await User.query().select('username');
+  try {
+    const users = await User.query().select('id', 'username');
 
-  return users;
+    return users;
+  } catch (error) {}
 };
 
-export interface CreateUserParams {
+interface CreateUserParams {
   username: string;
   password: string;
 }
 
-export const createUser = async (params: CreateUserParams): Promise<User> => {
-  const {username, password} = params;
+export const createUser = async (params: CreateUserParams): Promise<User | void> => {
+  try {
+    const {username, password} = params;
 
-  const passwordHash = await bcrypt.hash(password, 10);
+    const userWithUsername = await User.query().findOne({username});
+    if (userWithUsername) {
+      return;
+    }
 
-  const userArray: User[] = await User.knexQuery()
-    .insert({
-      username: username,
-      hashedpassword: passwordHash,
-    })
-    .returning(['id', 'username']);
+    const passwordHash = await bcrypt.hash(password, 10);
 
-  const user = userArray[0];
+    const userArray: User[] = await User.knexQuery()
+      .insert({
+        username: username,
+        hashedpassword: passwordHash,
+      })
+      .returning(['id', 'username']);
 
-  return user;
+    const user = userArray[0];
+
+    return user;
+  } catch (error) {}
+};
+
+interface DeleteUserParams {
+  id: string;
+}
+
+export const deleteUser = async (params: DeleteUserParams): Promise<number> => {
+  try {
+    const {id} = params;
+    const deletedUsers: number = await User.query().deleteById(id);
+    return deletedUsers;
+  } catch (err) {}
 };

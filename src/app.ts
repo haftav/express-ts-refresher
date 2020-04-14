@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, {Request, Response, NextFunction, response} from 'express';
 import Knex from 'knex';
 import morgan from 'morgan';
 import {Model} from 'objection';
@@ -30,6 +30,18 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
 }
 app.use(bodyParser.json());
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  if (req.method === 'Options') {
+    res.header('Access-Control-Allow-Methods', 'PUT, PATCH, POST, DELETE, GET');
+    return response.status(200).json({});
+  }
+  next();
+});
 
 // routes
 app.use('/api', routes());
