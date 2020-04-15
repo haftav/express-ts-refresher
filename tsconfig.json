@@ -14,8 +14,9 @@
               "node_modules/*",
               "src/types/*"
           ]
-      }
+      },
   },
+  "files": ["src/types/types.d.ts"],
   "include": [
       "src/**/*"
   ]

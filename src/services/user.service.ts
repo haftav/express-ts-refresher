@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import User from '../models/User';
 
@@ -49,4 +50,37 @@ export const deleteUser = async (params: DeleteUserParams): Promise<number> => {
     const deletedUsers: number = await User.query().deleteById(id);
     return deletedUsers;
   } catch (err) {}
+};
+
+interface VerifyUserParams {
+  username: string;
+  password: string;
+}
+
+export const verifyUser = async (params: VerifyUserParams): Promise<string | void> => {
+  try {
+    const {username, password} = params;
+    const user: User = await User.query().findOne({username});
+    if (!user) {
+      return;
+    }
+
+    const result = await bcrypt.compare(password, user.hashedpassword);
+    if (!result) {
+      return;
+    }
+
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: '1h',
+      }
+    );
+
+    return token;
+  } catch (error) {}
 };

@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
 
-import {createUser, deleteUser, getUsers} from '../services/user.service';
+import {createUser, deleteUser, getUsers, verifyUser} from '../services/user.service';
 import {failureResponse, successResponse} from '../utils/httpResponse';
 
 export default {
@@ -16,11 +16,30 @@ export default {
       );
     }
 
-    const response = successResponse({
-      user: newUser,
-    });
+    return res.status(201).json(
+      successResponse({
+        user: newUser,
+      })
+    );
+  },
+  loginUser: async (req: Request, res: Response) => {
+    const {username, password} = req.body;
 
-    res.status(201).json(response);
+    const token = await verifyUser({username, password});
+
+    if (!token) {
+      return res.status(401).json(
+        failureResponse({
+          message: 'Authentication failed.',
+        })
+      );
+    }
+    res.status(200).json(
+      successResponse({
+        token,
+        message: 'Auth Successful!',
+      })
+    );
   },
   getUsers: async (req: Request, res: Response) => {
     const users = await getUsers();
@@ -28,21 +47,21 @@ export default {
     const response = successResponse({
       users,
     });
-    res.status(200).json(response);
+    return res.status(200).json(response);
   },
   deleteUser: async (req: Request, res: Response) => {
     const {id} = req.params;
     const deletedUsers: number = await deleteUser({id});
 
     if (deletedUsers === 0) {
-      res.status(404).json(
+      return res.status(404).json(
         failureResponse({
           message: 'No record found for user with given id.',
         })
       );
     }
 
-    res.status(200).json(
+    return res.status(200).json(
       successResponse({
         message: 'User deleted',
       })

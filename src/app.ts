@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import bodyParser from 'body-parser';
-import express, {Request, Response, NextFunction, response} from 'express';
+import express, {NextFunction, Request, Response, response} from 'express';
 import Knex from 'knex';
 import morgan from 'morgan';
 import {Model} from 'objection';
