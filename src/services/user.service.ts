@@ -8,7 +8,9 @@ export const getUsers = async (): Promise<User[]> => {
     const users = await User.query().select('id', 'username');
 
     return users;
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 interface CreateUserParams {

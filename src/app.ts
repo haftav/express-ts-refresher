@@ -7,16 +7,11 @@ import Knex from 'knex';
 import morgan from 'morgan';
 import {Model} from 'objection';
 
+import {development} from './db/knexfile';
 import {routes} from './routes/v1';
 
-const isProd = process.env.NODE_ENV === 'production';
-
-const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_DATABASE}`;
-
-const knex = Knex({
-  client: 'pg',
-  connection: isProd ? process.env.DATABASE_URL : connectionString,
-});
+// will need to update when going to prod
+const knex = Knex(development);
 
 Model.knex(knex);
 
