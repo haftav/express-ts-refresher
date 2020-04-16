@@ -11,7 +11,7 @@ const knexConfig = {
       directory: './migrations',
     },
     seeds: {
-      directory: './seeds',
+      directory: './seeds/dev',
     },
   },
 };
