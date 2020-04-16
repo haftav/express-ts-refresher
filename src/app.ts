@@ -13,6 +13,7 @@ import {routes} from './routes/v1';
 // will need to update when going to prod
 const knex = Knex(development);
 
+// initialize Objection models
 Model.knex(knex);
 
 const app = express();
