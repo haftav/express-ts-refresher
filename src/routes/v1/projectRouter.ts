@@ -5,7 +5,7 @@ import {authMiddleware} from '../../middleware';
 
 const projectRouter: Router = Router();
 
-projectRouter.get('/', projectController.getProjects);
+projectRouter.get('/', authMiddleware, projectController.getProjects);
 projectRouter.get('/:id', authMiddleware, projectController.getOneProject);
 projectRouter.post('/', authMiddleware, projectController.createProject);
 projectRouter.put('/:id', authMiddleware, projectController.updateProject);

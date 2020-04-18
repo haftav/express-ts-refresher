@@ -52,9 +52,9 @@ export const updateProject = async (params: UpdateProjectParams): Promise<Projec
   } catch (error) {}
 };
 
-export const getProjects = async (): Promise<Project[]> => {
+export const getProjects = async (userId: number): Promise<Project[]> => {
   try {
-    const projects: Project[] = await Project.query().select();
+    const projects: Project[] = await Project.query().select().where('userId', userId);
 
     return projects;
   } catch (error) {}

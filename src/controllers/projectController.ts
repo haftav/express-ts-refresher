@@ -54,14 +54,17 @@ export const deleteProject: RequestHandler = async (req, res) => {
 
 export const getProjects: RequestHandler = async (req, res) => {
   try {
-    const projects = await projectService.getProjects();
+    const userId = req.userData.id;
+    const projects = await projectService.getProjects(userId);
 
     return res.status(200).json(
       successResponse({
         projects,
       })
     );
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const getOneProject: RequestHandler = async (req, res) => {
