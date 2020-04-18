@@ -1,13 +1,14 @@
+import {eachSeries} from 'async';
 import bcrypt from 'bcrypt';
 import * as Knex from 'knex';
 
 import users from '../../data/users';
 
-export async function seed(knex: Knex): Promise<void[]> {
+export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('users').del();
 
-  const insertPromises = users.map(async (user) => {
+  await eachSeries(users, async (user, callback) => {
     const {username, password} = user;
     const hashedpassword = await bcrypt.hash(password, 10);
 
@@ -15,7 +16,7 @@ export async function seed(knex: Knex): Promise<void[]> {
       username,
       hashedpassword,
     });
-  });
 
-  return Promise.all(insertPromises);
+    callback();
+  });
 }
