@@ -14,6 +14,10 @@ interface GetOneProjectParams {
   id: number;
 }
 
+interface DeleteProjectParams {
+  id: number;
+}
+
 const createProject = async (params: CreateProjectParams): Promise<Project> => {
   try {
     const {title, userId} = params;
@@ -27,6 +31,17 @@ const createProject = async (params: CreateProjectParams): Promise<Project> => {
     console.error(error);
   }
 };
+
+const deleteProject = async (params: DeleteProjectParams): Promise<number> => {
+  try {
+    const {id} = params;
+    const result = Project.query().deleteById(id);
+
+    return result;
+  } catch (error) {
+    
+  }
+}
 
 const updateProject = async (params: UpdateProjectParams): Promise<Project> => {
   try {
@@ -58,6 +73,7 @@ const getOneProject = async (params: GetOneProjectParams): Promise<Project> => {
 
 export default {
   createProject,
+  deleteProject,
   getProjects,
   getOneProject,
   updateProject,

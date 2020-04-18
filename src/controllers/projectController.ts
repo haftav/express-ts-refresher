@@ -22,6 +22,36 @@ const createProject: RequestHandler = async (req, res) => {
   } catch (error) {}
 };
 
+const deleteProject: RequestHandler = async (req, res) => {
+  try {
+    const projectId = parseInt(req.params.id, 10);
+    const userId = req.userData.id;
+    const project = await projectService.getOneProject({id: projectId});
+
+    if (!project) {
+      return res.status(404).json(
+        failureResponse({
+          message: 'Not found.',
+        })
+      );
+    }
+
+    if (project.userId !== userId) {
+      return res.status(403).json(
+        failureResponse({
+          message: '403 Forbidden',
+        })
+      );
+    }
+
+    await projectService.deleteProject({id: projectId});
+
+    return res.status(200).json(successResponse({}));
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const getProjects: RequestHandler = async (req, res) => {
   try {
     const projects = await projectService.getProjects();
@@ -102,6 +132,7 @@ const updateProject: RequestHandler = async (req, res) => {
 
 export default {
   createProject,
+  deleteProject,
   getProjects,
   getOneProject,
   updateProject,
