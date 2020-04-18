@@ -1,9 +1,9 @@
 import {RequestHandler} from 'express';
 
-import projectService from '../services/project.service';
+import * as projectService from '../services/project.service';
 import {failureResponse, successResponse} from '../utils/httpResponse';
 
-const createProject: RequestHandler = async (req, res) => {
+export const createProject: RequestHandler = async (req, res) => {
   try {
     const {id} = req.userData;
     const {title} = req.body;
@@ -22,7 +22,7 @@ const createProject: RequestHandler = async (req, res) => {
   } catch (error) {}
 };
 
-const deleteProject: RequestHandler = async (req, res) => {
+export const deleteProject: RequestHandler = async (req, res) => {
   try {
     const projectId = parseInt(req.params.id, 10);
     const userId = req.userData.id;
@@ -52,7 +52,7 @@ const deleteProject: RequestHandler = async (req, res) => {
   }
 };
 
-const getProjects: RequestHandler = async (req, res) => {
+export const getProjects: RequestHandler = async (req, res) => {
   try {
     const projects = await projectService.getProjects();
 
@@ -64,7 +64,7 @@ const getProjects: RequestHandler = async (req, res) => {
   } catch (error) {}
 };
 
-const getOneProject: RequestHandler = async (req, res) => {
+export const getOneProject: RequestHandler = async (req, res) => {
   try {
     const projectId = parseInt(req.params.id, 10);
     const userId = req.userData.id;
@@ -96,7 +96,7 @@ const getOneProject: RequestHandler = async (req, res) => {
   }
 };
 
-const updateProject: RequestHandler = async (req, res) => {
+export const updateProject: RequestHandler = async (req, res) => {
   try {
     const projectId = parseInt(req.params.id);
     const {title} = req.body;
@@ -128,12 +128,4 @@ const updateProject: RequestHandler = async (req, res) => {
       })
     );
   } catch (error) {}
-};
-
-export default {
-  createProject,
-  deleteProject,
-  getProjects,
-  getOneProject,
-  updateProject,
 };

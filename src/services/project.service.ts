@@ -18,7 +18,7 @@ interface DeleteProjectParams {
   id: number;
 }
 
-const createProject = async (params: CreateProjectParams): Promise<Project> => {
+export const createProject = async (params: CreateProjectParams): Promise<Project> => {
   try {
     const {title, userId} = params;
     const project: Project = await Project.query().insert({
@@ -32,18 +32,16 @@ const createProject = async (params: CreateProjectParams): Promise<Project> => {
   }
 };
 
-const deleteProject = async (params: DeleteProjectParams): Promise<number> => {
+export const deleteProject = async (params: DeleteProjectParams): Promise<number> => {
   try {
     const {id} = params;
     const result = Project.query().deleteById(id);
 
     return result;
-  } catch (error) {
-    
-  }
-}
+  } catch (error) {}
+};
 
-const updateProject = async (params: UpdateProjectParams): Promise<Project> => {
+export const updateProject = async (params: UpdateProjectParams): Promise<Project> => {
   try {
     const {title, id} = params;
     const project: Project = await Project.query().updateAndFetchById(id, {
@@ -54,7 +52,7 @@ const updateProject = async (params: UpdateProjectParams): Promise<Project> => {
   } catch (error) {}
 };
 
-const getProjects = async (): Promise<Project[]> => {
+export const getProjects = async (): Promise<Project[]> => {
   try {
     const projects: Project[] = await Project.query().select();
 
@@ -62,19 +60,11 @@ const getProjects = async (): Promise<Project[]> => {
   } catch (error) {}
 };
 
-const getOneProject = async (params: GetOneProjectParams): Promise<Project> => {
+export const getOneProject = async (params: GetOneProjectParams): Promise<Project> => {
   try {
     const {id} = params;
     const project = await Project.query().findById(id);
 
     return project;
   } catch (error) {}
-};
-
-export default {
-  createProject,
-  deleteProject,
-  getProjects,
-  getOneProject,
-  updateProject,
 };
