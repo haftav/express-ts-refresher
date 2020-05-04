@@ -22,5 +22,5 @@ export default [
   {
     title: 'Sick Game',
     userId: 1,
-  }
+  },
 ];

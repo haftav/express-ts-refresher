@@ -1,9 +1,9 @@
 declare namespace Express {
     export interface Request {
-        userData: {
+        userData?: {
             id: number
         };
     }
  }
 
- declare module 'async/eachSeries';
+declare module 'async/eachSeries';
