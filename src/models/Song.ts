@@ -1,26 +1,36 @@
-import {Model} from 'objection';
+import {Model, snakeCaseMappers} from 'objection';
 import path from 'path';
 
 class Song extends Model {
+  static get columnNameMappers() {
+    return snakeCaseMappers();
+  }
+
   static tableName = 'songs';
 
   id!: number;
-  name!: string;
-  artist!: string;
+  songName!: string;
+  artist: string;
+  userId!: number;
+  skillLevel!: number;
 
   static relationMappings = {
-    users: {
-      relation: Model.ManyToManyRelation,
+    user: {
+      relation: Model.BelongsToOneRelation,
       modelClass: path.join(__dirname, 'User'),
       join: {
-        from: 'songs.id',
-        through: {
-          from: 'users_songs.song_id',
-          to: 'users_songs.user_id',
-        },
+        from: 'songs.user_id',
         to: 'users.id',
       },
     },
+    // skillLevel: {
+    //   relation: Model.BelongsToOneRelation,
+    //   modelClass: path.join(__dirname, 'User'),
+    //   join: {
+    //     from: 'songs.skill_level',
+    //     to: 'skill_levels.value',
+    //   },
+    // },
   };
 }
 
