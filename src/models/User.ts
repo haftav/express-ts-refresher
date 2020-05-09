@@ -11,10 +11,10 @@ class User extends Model {
   static relationMappings = {
     projects: {
       relation: Model.HasManyRelation,
-      modelClass: path.join(__dirname, 'Project'),
+      modelClass: path.join(__dirname, 'Song'),
       join: {
         from: 'users.id',
-        to: 'projects.userId',
+        to: 'songs.user_id',
       },
     },
   };

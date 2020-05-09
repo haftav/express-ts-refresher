@@ -1,7 +1,8 @@
 import {Request, Response} from 'express';
 
 import {createUser, deleteUser, getUsers, verifyUser} from '../services/user.service';
-import {failureResponse, successResponse} from '../utils/httpResponse';
+import * as HttpError from '../utils/httpError';
+import {successResponse} from '../utils/httpResponse';
 
 export default {
   createUser: async (req: Request, res: Response) => {
@@ -9,11 +10,7 @@ export default {
     const newUser = await createUser({username, password});
 
     if (!newUser) {
-      return res.status(409).json(
-        failureResponse({
-          message: 'User exists',
-        })
-      );
+      throw new HttpError.ConflictError('User exists.');
     }
 
     return res.status(201).json(
@@ -28,11 +25,7 @@ export default {
     const token = await verifyUser({username, password});
 
     if (!token) {
-      return res.status(401).json(
-        failureResponse({
-          message: 'Authentication failed.',
-        })
-      );
+      throw new HttpError.AuthenticationError();
     }
     res.status(200).json(
       successResponse({
@@ -54,11 +47,7 @@ export default {
     const deletedUsers: number = await deleteUser({id});
 
     if (deletedUsers === 0) {
-      return res.status(404).json(
-        failureResponse({
-          message: 'Not found.',
-        })
-      );
+      throw new HttpError.NotFoundError();
     }
 
     return res.status(200).json(

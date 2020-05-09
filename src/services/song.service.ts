@@ -60,11 +60,17 @@ export const updateSong = async (params: UpdateSongParams): Promise<Song> => {
 };
 
 export const getSongs = async (userId: number): Promise<Song[]> => {
-  try {
-    const songs = await Song.query().select().where('user_id', userId);
+  const songs = await Song.query()
+    .select('song_name', 'artist')
+    .allowGraph('[user, skill]')
+    .withGraphFetched('[skill]')
+    .modifyGraph('user', (builder) => {
+      builder.select('username');
+    })
+    .where('user_id', userId)
+    .debug();
 
-    return songs;
-  } catch (error) {}
+  return songs;
 };
 
 export const getOneSong = async (params: GetOneSongParams): Promise<Song> => {

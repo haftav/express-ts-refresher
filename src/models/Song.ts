@@ -23,14 +23,14 @@ class Song extends Model {
         to: 'users.id',
       },
     },
-    // skillLevel: {
-    //   relation: Model.BelongsToOneRelation,
-    //   modelClass: path.join(__dirname, 'User'),
-    //   join: {
-    //     from: 'songs.skill_level',
-    //     to: 'skill_levels.value',
-    //   },
-    // },
+    skill: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: path.join(__dirname, 'SkillLevel'),
+      join: {
+        from: 'songs.skill_level',
+        to: 'skill_levels.value',
+      },
+    },
   };
 }
 
