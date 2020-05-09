@@ -1,3 +1,5 @@
+import {HttpError} from './httpError';
+
 type SuccessResponseType<T> = {
   status: 'success';
   data: T;
@@ -31,11 +33,12 @@ export const failureResponse = <T>(data: T): FailureResponseType<T> => {
   return response;
 };
 
-export const errorResponse = <T>(
-  message: string,
-  code?: number,
-  data?: T
-): ErrorResponseType<T> => {
+export const errorResponse = <T>(params: {
+  message: string;
+  code?: number;
+  data?: T;
+}): ErrorResponseType<T> => {
+  const {message, code, data} = params;
   const response: ErrorResponseType<T> = {
     status: 'error',
     message,
@@ -47,4 +50,17 @@ export const errorResponse = <T>(
     response.data = data;
   }
   return response;
+};
+
+export const createErrorResponse = (err: HttpError | Error, statusCode: number) => {
+  if (statusCode.toString()[0] === '4') {
+    return failureResponse({
+      message: err.message,
+    });
+  } else {
+    return errorResponse({
+      message: err.message,
+      code: statusCode,
+    });
+  }
 };

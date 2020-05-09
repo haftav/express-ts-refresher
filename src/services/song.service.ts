@@ -23,19 +23,15 @@ interface DeleteSongParams {
 }
 
 export const createSong = async (params: CreateSongParams): Promise<Song> => {
-  try {
-    const {songName, artist, userId, skillLevel} = params;
-    const song = await Song.query().insert({
-      songName,
-      artist,
-      userId,
-      skillLevel,
-    });
+  const {songName, artist, userId, skillLevel} = params;
+  const song = await Song.query().insert({
+    songName,
+    artist,
+    userId,
+    skillLevel,
+  });
 
-    return song;
-  } catch (error) {
-    console.error(error);
-  }
+  return song;
 };
 
 export const deleteSong = async (params: DeleteSongParams): Promise<number> => {

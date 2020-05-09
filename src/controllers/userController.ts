@@ -56,7 +56,7 @@ export default {
     if (deletedUsers === 0) {
       return res.status(404).json(
         failureResponse({
-          message: 'No record found for user with given id.',
+          message: 'Not found.',
         })
       );
     }
