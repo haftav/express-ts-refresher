@@ -1,4 +1,5 @@
 import {HttpError} from './httpError';
+import User, {UserResponse} from '../models/User';
 
 type SuccessResponseType<T> = {
   status: 'success';
@@ -63,4 +64,13 @@ export const createErrorResponse = (err: HttpError | Error, statusCode: number) 
       code: statusCode,
     });
   }
+};
+
+export const createUserResponse = (user: User): UserResponse => {
+  const response = {
+    id: user.id,
+    username: user.username,
+  };
+
+  return response;
 };

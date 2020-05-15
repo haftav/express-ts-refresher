@@ -3,6 +3,12 @@ import jwt from 'jsonwebtoken';
 
 import User from '../models/User';
 
+export const getUser = async (id: number): Promise<User> => {
+  const user = await User.query().findById(id);
+
+  return user;
+};
+
 export const getUsers = async (): Promise<User[]> => {
   try {
     const users = await User.query().select('id', 'username');
@@ -59,7 +65,7 @@ interface VerifyUserParams {
   password: string;
 }
 
-export const verifyUser = async (params: VerifyUserParams): Promise<string | void> => {
+export const verifyUser = async (params: VerifyUserParams): Promise<User | void> => {
   try {
     const {username, password} = params;
     const user: User = await User.query().findOne({username});
@@ -72,17 +78,19 @@ export const verifyUser = async (params: VerifyUserParams): Promise<string | voi
       return;
     }
 
-    const token = jwt.sign(
-      {
-        id: user.id,
-        username: user.username,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: '1h',
-      }
-    );
+    return user;
 
-    return token;
+    // const token = jwt.sign(
+    //   {
+    //     id: user.id,
+    //     username: user.username,
+    //   },
+    //   process.env.JWT_SECRET,
+    //   {
+    //     expiresIn: '1h',
+    //   }
+    // );
+
+    // return token;
   } catch (error) {}
 };

@@ -1,8 +1,9 @@
 import {Request, Response} from 'express';
 
-import {createUser, deleteUser, getUsers, verifyUser} from '../services/user.service';
+import {createJWT, createRefreshToken} from '../services/auth.service';
+import {createUser, deleteUser, getUser, getUsers, verifyUser} from '../services/user.service';
 import * as HttpError from '../utils/httpError';
-import {successResponse} from '../utils/httpResponse';
+import {createUserResponse, successResponse} from '../utils/httpResponse';
 
 export default {
   createUser: async (req: Request, res: Response) => {
@@ -15,21 +16,32 @@ export default {
 
     return res.status(201).json(
       successResponse({
-        user: newUser,
+        user: createUserResponse(newUser),
       })
     );
   },
   loginUser: async (req: Request, res: Response) => {
     const {username, password} = req.body;
 
-    const token = await verifyUser({username, password});
+    const user = await verifyUser({username, password});
 
-    if (!token) {
+    if (!user) {
       throw new HttpError.AuthenticationError();
     }
+
+    const token = createJWT(user);
+    const refreshToken = createRefreshToken(user);
+
+    // should update this to set refresh token in cookie in future
+    res.cookie('refresh_token', refreshToken, {
+      domain: 'localhost',
+      httpOnly: false,
+    });
+
     res.status(200).json(
       successResponse({
-        token,
+        accessToken: token,
+        user: createUserResponse(user),
         message: 'Auth Successful!',
       })
     );
@@ -43,6 +55,7 @@ export default {
     return res.status(200).json(response);
   },
   deleteUser: async (req: Request, res: Response) => {
+    // currently anyone can delete a user. Need to fix this
     const {id} = req.params;
     const deletedUsers: number = await deleteUser({id});
 
@@ -53,6 +66,22 @@ export default {
     return res.status(200).json(
       successResponse({
         message: 'User deleted',
+      })
+    );
+  },
+  getUser: async (req: Request, res: Response) => {
+    const userId = req.userData.id;
+
+    console.log(req.cookies);
+    const user = await getUser(userId);
+
+    if (!user) {
+      return new HttpError.NotFoundError();
+    }
+
+    return res.status(200).json(
+      successResponse({
+        user: createUserResponse(user),
       })
     );
   },

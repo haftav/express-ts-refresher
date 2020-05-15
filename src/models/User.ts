@@ -20,4 +20,9 @@ class User extends Model {
   };
 }
 
+export interface UserResponse {
+  id: number;
+  username: string;
+}
+
 export default User;
