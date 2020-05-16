@@ -1,29 +1,23 @@
-import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 import User from '../models/User';
 
-export const createRefreshToken = (user: User) => {
-  const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-    },
-    process.env.REFRESH_SECRET
-  );
-  return token;
-};
+interface VerifyUserParams {
+  username: string;
+  password: string;
+}
 
-export const createJWT = (user: User) => {
-  const token = jwt.sign(
-    {
-      id: user.id,
-      username: user.username,
-    },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: '1h',
-    }
-  );
+export const verifyUser = async (params: VerifyUserParams): Promise<User | void> => {
+  const {username, password} = params;
+  const user: User = await User.query().findOne({username});
+  if (!user) {
+    return;
+  }
 
-  return token;
+  const result = await bcrypt.compare(password, user.hashedpassword);
+  if (!result) {
+    return;
+  }
+
+  return user;
 };

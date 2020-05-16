@@ -1,5 +1,4 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
 import User from '../models/User';
 
@@ -66,31 +65,16 @@ interface VerifyUserParams {
 }
 
 export const verifyUser = async (params: VerifyUserParams): Promise<User | void> => {
-  try {
-    const {username, password} = params;
-    const user: User = await User.query().findOne({username});
-    if (!user) {
-      return;
-    }
+  const {username, password} = params;
+  const user: User = await User.query().findOne({username});
+  if (!user) {
+    return;
+  }
 
-    const result = await bcrypt.compare(password, user.hashedpassword);
-    if (!result) {
-      return;
-    }
+  const result = await bcrypt.compare(password, user.hashedpassword);
+  if (!result) {
+    return;
+  }
 
-    return user;
-
-    // const token = jwt.sign(
-    //   {
-    //     id: user.id,
-    //     username: user.username,
-    //   },
-    //   process.env.JWT_SECRET,
-    //   {
-    //     expiresIn: '1h',
-    //   }
-    // );
-
-    // return token;
-  } catch (error) {}
+  return user;
 };

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 
-import {createJWT, createRefreshToken} from '../services/auth.service';
 import {createUser, deleteUser, getUser, getUsers, verifyUser} from '../services/user.service';
+import {createJWT, createRefreshToken} from '../utils/auth';
 import * as HttpError from '../utils/httpError';
 import {createUserResponse, successResponse} from '../utils/httpResponse';
 
