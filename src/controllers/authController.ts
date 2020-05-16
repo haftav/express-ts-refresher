@@ -44,8 +44,6 @@ export const requestToken: RequestHandler = async (req, res) => {
   // read refresh_token cookie
   // if valid, send back new JWT
 
-  console.log(req.cookies['refresh_token']);
-
   const refreshToken = req.cookies?.['refresh_token'];
 
   if (!refreshToken) {
@@ -55,8 +53,6 @@ export const requestToken: RequestHandler = async (req, res) => {
   const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 
   const user = await userService.getUser((decoded as DecodedToken).id);
-
-  console.log('user:', user);
 
   if (!user) {
     throw new HttpError.NotFoundError();

@@ -72,7 +72,6 @@ export default {
   getUser: async (req: Request, res: Response) => {
     const userId = req.userData.id;
 
-    console.log(req.cookies);
     const user = await getUser(userId);
 
     if (!user) {
