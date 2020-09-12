@@ -8,6 +8,7 @@ import {createUserResponse, successResponse} from '../utils/httpResponse';
 export default {
   createUser: async (req: Request, res: Response) => {
     const {username, password} = req.body;
+    // sanitize input here
     const newUser = await createUser({username, password});
 
     if (!newUser) {

@@ -49,9 +49,15 @@ export const updateSong = async (params: UpdateSongParams): Promise<Song> => {
   try {
     // unknown number of parameters can be passed in, so spread them into the query options
     const {id, ...rest} = params;
-    const song: Song = await Song.query().updateAndFetchById(id, {
+    await Song.query().patchAndFetchById(id, {
       ...rest,
     });
+
+    const song = await Song.query()
+      .findById(id)
+      .select('song_name', 'artist', 'id')
+      .allowGraph('[skill]')
+      .withGraphFetched('[skill]');
 
     return song;
   } catch (error) {
@@ -61,14 +67,14 @@ export const updateSong = async (params: UpdateSongParams): Promise<Song> => {
 
 export const getSongs = async (userId: number): Promise<Song[]> => {
   const songs = await Song.query()
-    .select('song_name', 'artist')
+    .select('song_name', 'artist', 'id')
+    .orderBy('id', 'desc')
     .allowGraph('[user, skill]')
     .withGraphFetched('[skill]')
     .modifyGraph('user', (builder) => {
       builder.select('username');
     })
-    .where('user_id', userId)
-    .debug();
+    .where('user_id', userId);
 
   return songs;
 };

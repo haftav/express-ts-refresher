@@ -1,5 +1,5 @@
-import {HttpError} from './httpError';
 import User, {UserResponse} from '../models/User';
+import {HttpError} from './httpError';
 
 type SuccessResponseType<T> = {
   status: 'success';

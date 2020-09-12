@@ -1,10 +1,9 @@
-import bcrypt from 'bcrypt';
 import {RequestHandler} from 'express';
 import jwt from 'jsonwebtoken';
 
 import * as authService from '../services/auth.service';
 import * as userService from '../services/user.service';
-import {createJWT, createRefreshToken} from '../utils/auth';
+import {createJWT} from '../utils/auth';
 import * as HttpError from '../utils/httpError';
 import {createUserResponse, successResponse} from '../utils/httpResponse';
 
@@ -14,6 +13,7 @@ interface DecodedToken {
 }
 
 export const login: RequestHandler = async (req, res) => {
+  // may want to check table for blacklisted users before continuing
   const {username, password} = req.body;
   // need to sanitize input here
 
@@ -23,23 +23,15 @@ export const login: RequestHandler = async (req, res) => {
     throw new HttpError.AuthenticationError();
   }
 
-  const token = createJWT(user);
-  const refreshToken = createRefreshToken(user);
-
-  res.cookie('refresh_token', refreshToken, {
-    domain: 'localhost',
-    httpOnly: false,
-  });
-
   res.status(200).json(
     successResponse({
-      accessToken: token,
       user: createUserResponse(user),
       message: 'Auth Successful!',
     })
   );
 };
 
+// NOTE -> not currently in use
 export const requestToken: RequestHandler = async (req, res) => {
   // read refresh_token cookie
   // if valid, send back new JWT
@@ -60,9 +52,13 @@ export const requestToken: RequestHandler = async (req, res) => {
 
   const token = createJWT(user);
 
+  const jwtTokenExpiry = new Date(new Date().getTime() + 2 * 60 * 1000);
+
   res.status(200).json(
     successResponse({
       accessToken: token,
+      refreshToken,
+      jwtTokenExpiry,
       user: createUserResponse(user),
       message: 'Auth Successful!',
     })
