@@ -1,29 +1,26 @@
-import dotenv from 'dotenv';
-dotenv.config({path: '../../.env'});
-
 // const {DB_DATABASE, DB_PORT, DB_HOST} = process.env;
 
-const knexConfig = {
+const knexConfig: {[key: string]: any} = {
   development: {
     client: 'pg',
     connection: 'postgres://@localhost:5432/babylon_api',
     migrations: {
-      directory: './migrations',
+      directory: 'src/db/migrations',
     },
     seeds: {
-      directory: './seeds/dev',
+      directory: 'src/db/seeds/dev',
     },
   },
   test: {
     client: 'pg',
     connection: 'postgres://@localhost:5432/babylon_api_test',
     migrations: {
-      directory: './migrations',
+      directory: 'src/db/migrations',
     },
     seeds: {
-      directory: './seeds/dev',
+      directory: 'src/db/seeds/test',
     },
   },
 };
 
-export const {development} = knexConfig;
+export const {development, test} = knexConfig;
