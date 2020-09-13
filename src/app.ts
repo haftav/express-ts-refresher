@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import 'express-async-errors';
 
 import cookieParser from 'cookie-parser';
@@ -6,14 +7,10 @@ import express, {ErrorRequestHandler, NextFunction, Request, Response} from 'exp
 import morgan from 'morgan';
 import {Model} from 'objection';
 
-// import * as knexConfig from '../knexfile';
 import knex from './db/knex';
 import {routes} from './routes/v1';
 import {HttpError, NotFoundError} from './utils/httpError';
 import {createErrorResponse} from './utils/httpResponse';
-
-// TODO: update with logic for production environment
-// const knex = Knex((knexConfig as {[key: string]: any})[process.env.NODE_ENV]);
 
 // initialize Objection models
 Model.knex(knex);
@@ -24,7 +21,7 @@ const app = express();
 app.set('port', process.env.PORT || 3030);
 
 // middleware
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 app.use(express.json());

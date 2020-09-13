@@ -5,20 +5,20 @@ const knexConfig: {[key: string]: any} = {
     client: 'pg',
     connection: 'postgres://@localhost:5432/babylon_api',
     migrations: {
-      directory: 'src/db/migrations',
+      directory: __dirname + '/migrations',
     },
     seeds: {
-      directory: 'src/db/seeds/dev',
+      directory: __dirname + '/seeds/dev',
     },
   },
   test: {
     client: 'pg',
     connection: 'postgres://@localhost:5432/babylon_api_test',
     migrations: {
-      directory: 'src/db/migrations',
+      directory: __dirname + '/migrations',
     },
     seeds: {
-      directory: 'src/db/seeds/test',
+      directory: __dirname + '/seeds/test',
     },
   },
 };
