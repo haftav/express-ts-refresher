@@ -1,8 +1,6 @@
 import Knex from 'knex';
 
-import * as knexConfig from './knexfile';
-
-const knex = Knex((knexConfig as {[key: string]: any})[process.env.NODE_ENV]);
+import knex from './src/db/knex';
 
 beforeEach(async (done) => {
   await knex.migrate.rollback();
