@@ -56,8 +56,13 @@ export default {
     return res.status(200).json(response);
   },
   deleteUser: async (req: Request, res: Response) => {
-    // currently anyone can delete a user. Need to fix this
     const {id} = req.params;
+    const userId = req.userData.id;
+
+    if (parseInt(id, 10) !== userId) {
+      throw new HttpError.AuthenticationError();
+    }
+
     const deletedUsers: number = await deleteUser({id});
 
     if (deletedUsers === 0) {
@@ -76,7 +81,7 @@ export default {
     const user = await getUser(userId);
 
     if (!user) {
-      return new HttpError.NotFoundError();
+      throw new HttpError.NotFoundError();
     }
 
     return res.status(200).json(

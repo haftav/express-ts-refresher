@@ -9,6 +9,6 @@
     "**/coverage": true
   },
   "files.exclude": {
-    "**/dist": true
+    // "**/dist": true
   }
 }
