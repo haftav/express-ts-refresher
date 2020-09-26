@@ -1,4 +1,3 @@
-import e from 'express';
 import request from 'supertest';
 
 import app from '../src/app';
@@ -45,7 +44,7 @@ describe('/user', () => {
       .expect(201, done);
   });
 
-  it('POST /user/signup -> returns 409 if user exists', async (done) => {
+  test('POST /user/signup -> returns 409 if user exists', async (done) => {
     await request(app)
       .post('/api/user/signup')
       .send({username: 'tester', password: 'password'})
