@@ -1,5 +1,3 @@
-import * as httpResponse from './httpResponse';
-
 export class HttpError extends Error {
   statusCode: number;
   constructor(statusCode: number, message: string) {

@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
 
 import {createUser, deleteUser, getUser, getUsers, verifyUser} from '../services/user.service';
-import {createJWT, createRefreshToken} from '../utils/auth';
+import {createJWT} from '../utils/auth';
 import * as HttpError from '../utils/httpError';
 import {createUserResponse, successResponse} from '../utils/httpResponse';
 
@@ -31,13 +31,6 @@ export default {
     }
 
     const token = createJWT(user);
-    // const refreshToken = createRefreshToken(user);
-
-    // should update this to set refresh token in cookie in future
-    // res.cookie('refresh_token', refreshToken, {
-    //   domain: 'localhost',
-    //   httpOnly: false,
-    // });
 
     res.status(200).json(
       successResponse({
