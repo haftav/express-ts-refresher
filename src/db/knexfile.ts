@@ -1,9 +1,9 @@
-// const {DB_DATABASE, DB_PORT, DB_HOST} = process.env;
+const DB_HOST = process.env.DB_HOST || 'localhost';
 
 const knexConfig: {[key: string]: any} = {
   development: {
     client: 'pg',
-    connection: 'postgres://@localhost:5432/babylon_api',
+    connection: `postgres://${DB_HOST}:5432/babylon_api`,
     migrations: {
       directory: __dirname + '/migrations',
     },
@@ -13,7 +13,7 @@ const knexConfig: {[key: string]: any} = {
   },
   test: {
     client: 'pg',
-    connection: 'postgres://@localhost:5432/babylon_api_test',
+    connection: `postgres://${DB_HOST}:5432/babylon_api_test`,
     migrations: {
       directory: __dirname + '/migrations',
     },
