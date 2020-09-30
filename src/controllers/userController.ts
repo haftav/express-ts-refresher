@@ -31,13 +31,13 @@ export default {
     }
 
     const token = createJWT(user);
-    const refreshToken = createRefreshToken(user);
+    // const refreshToken = createRefreshToken(user);
 
     // should update this to set refresh token in cookie in future
-    res.cookie('refresh_token', refreshToken, {
-      domain: 'localhost',
-      httpOnly: false,
-    });
+    // res.cookie('refresh_token', refreshToken, {
+    //   domain: 'localhost',
+    //   httpOnly: false,
+    // });
 
     res.status(200).json(
       successResponse({
