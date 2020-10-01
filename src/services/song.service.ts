@@ -24,12 +24,19 @@ interface DeleteSongParams {
 
 export const createSong = async (params: CreateSongParams): Promise<Song> => {
   const {songName, artist, userId, skillLevel} = params;
-  const song = await Song.query().insert({
+
+  const {id} = await Song.query().insert({
     songName,
     artist,
     userId,
     skillLevel,
   });
+
+  const song = await Song.query()
+    .findById(id)
+    .select('song_name', 'artist', 'id')
+    .allowGraph('[skill]')
+    .withGraphFetched('[skill]');
 
   return song;
 };

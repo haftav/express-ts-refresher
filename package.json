@@ -20,7 +20,7 @@
     "start": "node dist/server.js",
     "watch-node": "wait-on dist/server.js && NODE_ENV=development nodemon -r dotenv/config dist/server.js",
     "watch-ts": "tsc -w",
-    "test": "jest --setupFiles dotenv/config"
+    "test": "jest --setupFiles dotenv/config --runInBand"
   },
   "devDependencies": {
     "@types/async": "^3.2.0",
