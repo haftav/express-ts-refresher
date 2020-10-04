@@ -1,5 +1,7 @@
 const DB_HOST = process.env.DB_HOST || 'localhost';
+const {DB_CONNECTION_STRING} = process.env;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const knexConfig: {[key: string]: any} = {
   development: {
     client: 'pg',
@@ -21,6 +23,22 @@ const knexConfig: {[key: string]: any} = {
       directory: __dirname + '/seeds/test',
     },
   },
+  production: {
+    client: 'pg',
+    connection: {
+      connectionString: DB_CONNECTION_STRING,
+      ssl: {
+        ssl: true,
+        rejectUnauthorized: false,
+      },
+    },
+    migrations: {
+      directory: __dirname + '/migrations',
+    },
+    seeds: {
+      directory: __dirname + '/seeds/prod',
+    },
+  },
 };
 
-export const {development, test} = knexConfig;
+export const {development, test, production} = knexConfig;

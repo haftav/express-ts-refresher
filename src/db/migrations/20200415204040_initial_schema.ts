@@ -17,6 +17,21 @@ export async function up(knex: Knex): Promise<void> {
       table.increments('value').primary();
       table.string('default_title', 100);
     });
+
+    await knex('skill_levels').insert([
+      {
+        default_title: 'Beginner',
+      },
+      {
+        default_title: 'Intermediate',
+      },
+      {
+        default_title: 'Advanced',
+      },
+      {
+        default_title: 'Expert',
+      },
+    ]);
   }
 
   /**
