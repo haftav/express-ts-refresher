@@ -11,6 +11,13 @@ import {routes} from './routes/v1';
 import {HttpError, NotFoundError} from './utils/httpError';
 import {createErrorResponse} from './utils/httpResponse';
 
+(async function runMigrations() {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log('Running migrations...');
+    await knex.migrate.latest();
+  }
+})();
+
 // initialize Objection models
 Model.knex(knex);
 
