@@ -34,7 +34,7 @@ chmod 600 deploy_key
 # Log into Droplet, stop the currently running container and start the new one
 echo "Stopping container name current and starting ${IMAGE}:${GIT_VERSION}"
 
-doctl compute ssh ${DROPLET} --ssh-key-path deploy_key --ssh-command "docker pull ${IMAGE}:${GIT_VERSION} && 
+doctl compute ssh ${DROPLET} --ssh-key-path deploy_key --ssh-user travis --ssh-command "docker pull ${IMAGE}:${GIT_VERSION} && 
 docker stop current && 
 docker rm current && 
 docker run --name=current --restart unless-stopped -e NODE_ENV=production -e PORT=3030 -e JWT_SECRET=${JWT_SECRET} -e DB_CONNECTION_STRING=${DB_CONNECTION_STRING} -d -p 3030:3030 ${IMAGE}:${GIT_VERSION} &&
