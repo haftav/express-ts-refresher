@@ -17,6 +17,7 @@ script:
   - yarn test
 services:
   - postgresql
+  - docker
 deploy:
   # Build Docker container and push to Docker Hub
   # Pull into DigitalOcean container and start
