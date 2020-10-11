@@ -73,6 +73,7 @@ export const updateSong = async (params: UpdateSongParams): Promise<Song> => {
 };
 
 export const getSongs = async (userId: number): Promise<Song[]> => {
+  const currentTime = Date.now();
   const songs = await Song.query()
     .select('song_name', 'artist', 'id')
     .orderBy('id', 'desc')
@@ -82,6 +83,11 @@ export const getSongs = async (userId: number): Promise<Song[]> => {
       builder.select('username');
     })
     .where('user_id', userId);
+
+  const endTime = Date.now();
+  const duration = endTime - currentTime;
+
+  console.log('GET SONGS DURATION:', duration);
 
   return songs;
 };
