@@ -56,7 +56,7 @@ app.use((req, res, next) => {
 });
 
 // error handling
-app.use(((err: HttpError | Error, req, res) => {
+app.use(((err: HttpError | Error, req, res, next) => {
   console.error('ERROR:', err.message);
   console.error('STACK:', err.stack);
 

@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 
 import {createUser, deleteUser, getUser, getUsers, verifyUser} from '../services/user.service';
 import {createJWT} from '../utils/auth';
@@ -6,13 +6,14 @@ import * as HttpError from '../utils/httpError';
 import {createUserResponse, successResponse} from '../utils/httpResponse';
 
 export default {
-  createUser: async (req: Request, res: Response) => {
+  createUser: async (req: Request, res: Response, next: NextFunction) => {
     const {username, password} = req.body;
     // sanitize input here
     const newUser = await createUser({username, password});
 
     if (!newUser) {
-      throw new HttpError.ConflictError('User exists.');
+      next(new HttpError.ConflictError('User exists.'));
+      return;
     }
 
     return res.status(201).json(

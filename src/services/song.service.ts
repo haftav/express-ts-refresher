@@ -68,7 +68,7 @@ export const updateSong = async (params: UpdateSongParams): Promise<Song> => {
 
     return song;
   } catch (error) {
-    console.error(error);
+    throw new Error(error);
   }
 };
 
