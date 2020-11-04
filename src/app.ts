@@ -34,7 +34,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use((req: Request, res: Response, next: NextFunction) => {
   // TODO: Update allowed origins
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  if (process.env.NODE_ENV === 'development') {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  }
+
+  res.header('Access-Control-Allow-Origin', 'https://songstack.xyz');
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header(
     'Access-Control-Allow-Headers',
