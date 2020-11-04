@@ -8,6 +8,8 @@ const knexConfig: {[key: string]: any} = {
     connection: `postgres://${DB_HOST}:5432/babylon_api`,
     migrations: {
       directory: __dirname + '/migrations',
+      extension: 'ts',
+      loadExtensions: ['js', 'ts'],
     },
     seeds: {
       directory: __dirname + '/seeds/dev',
